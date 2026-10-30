@@ -71,15 +71,11 @@ KateTemplateHandler::KateTemplateHandler(KTextEditor::ViewPrivate *view,
     m_view->setSelection(selection->toRange());
     initializeTemplate();
 
-    // Check before removal: selection is a MovingRange and will collapse to empty once its text is deleted
-    const bool hadSelection = !selection->isEmpty();
     // then delete the selected text (if any); it was replaced by the template
     doc()->removeText(selection->toRange());
 
-    if (hadSelection) {
-        for (auto &field : m_fields) {
-            field.staticRange = field.range->toRange();
-        }
+    for (auto &field : m_fields) {
+        field.staticRange = field.range->toRange();
     }
 
     const bool have_editable_field = std::any_of(m_fields.constBegin(), m_fields.constEnd(), [](const TemplateField &field) {
