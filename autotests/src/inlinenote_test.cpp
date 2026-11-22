@@ -209,4 +209,37 @@ void InlineNoteTest::testInlineNote()
     view.unregisterInlineNoteProvider(&noteProvider);
 }
 
+void InlineNoteTest::testNonClickableInlineNote()
+{
+    KTextEditor::DocumentPrivate doc;
+    doc.setText(QStringLiteral("hello"));
+
+    KTextEditor::ViewPrivate view(&doc, nullptr);
+    view.show();
+    view.resize(400, 300);
+
+    view.setCursorPosition({0, 0});
+    QCOMPARE(view.cursorPosition(), Cursor(0, 0));
+
+    NoteProvider noteProvider;
+    QVERIFY(noteProvider.isClickable());
+    noteProvider.setClickable(false);
+    QVERIFY(!noteProvider.isClickable());
+
+    view.registerInlineNoteProvider(&noteProvider);
+
+    auto *const internalView = view.editorWidget();
+    QVERIFY(internalView);
+
+    const auto coordCol05 = view.cursorToCoordinate({0, 5});
+    const QPoint clickPos = internalView->mapFromGlobal(view.mapToGlobal(coordCol05 + QPoint(4, 1)));
+    QTest::mousePress(internalView, Qt::LeftButton, Qt::NoModifier, clickPos);
+    QTest::mouseRelease(internalView, Qt::LeftButton, Qt::NoModifier, clickPos);
+
+    QCOMPARE(noteProvider.noteActivatedCount, 0);
+    QCOMPARE(view.cursorPosition(), Cursor(0, 5));
+
+    view.unregisterInlineNoteProvider(&noteProvider);
+}
+
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

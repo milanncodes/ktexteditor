@@ -154,6 +154,25 @@ public:
      */
     virtual void inlineNoteMouseMoveEvent(const InlineNote &note, const QPoint &globalPos);
 
+    /*!
+     * Returns whether clicking on notes from this provider activates them
+     * and consumes the mouse press event.
+     *
+     * Defaults to \c true. Set to \c false for passive notes (such as inline
+     * diagnostics or inlay hints) so clicks pass through to normal editor
+     * cursor placement.
+     *
+     * \since 6.34
+     */
+    bool isClickable() const;
+
+    /*!
+     * Sets whether notes from this provider intercept mouse clicks.
+     *
+     * \since 6.34
+     */
+    void setClickable(bool clickable);
+
 Q_SIGNALS:
     /*!
      * The provider should emit the signal inlineNotesReset() when almost all inline notes

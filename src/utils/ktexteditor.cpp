@@ -277,9 +277,31 @@ TextHintProvider::TextHintProvider() = default;
 
 TextHintProvider::~TextHintProvider() = default;
 
-InlineNoteProvider::InlineNoteProvider() = default;
+class KTextEditor::InlineNoteProviderPrivate
+{
+public:
+    bool clickable = true;
+};
 
-InlineNoteProvider::~InlineNoteProvider() = default;
+InlineNoteProvider::InlineNoteProvider()
+    : d(new InlineNoteProviderPrivate)
+{
+}
+
+InlineNoteProvider::~InlineNoteProvider()
+{
+    delete d;
+}
+
+bool InlineNoteProvider::isClickable() const
+{
+    return d->clickable;
+}
+
+void InlineNoteProvider::setClickable(bool clickable)
+{
+    d->clickable = clickable;
+}
 
 KateInlineNoteData::KateInlineNoteData(KTextEditor::InlineNoteProvider *provider,
                                        const KTextEditor::View *view,

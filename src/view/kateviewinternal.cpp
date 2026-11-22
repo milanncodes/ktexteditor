@@ -3316,10 +3316,10 @@ void KateViewInternal::mousePressEvent(QMouseEvent *e)
         return;
     }
 
-    // was an inline note clicked?
+    // was a clickable inline note clicked?
     const auto noteData = inlineNoteAt(e->globalPosition().toPoint());
     const KTextEditor::InlineNote note(noteData);
-    if (note.position().isValid()) {
+    if (note.position().isValid() && note.provider()->isClickable()) {
         note.provider()->inlineNoteActivated(noteData, e->button(), e->globalPosition().toPoint());
         return;
     }

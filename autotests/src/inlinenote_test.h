@@ -20,6 +20,7 @@ public:
 
 private Q_SLOTS:
     void testInlineNote();
+    void testNonClickableInlineNote();
 };
 
 #endif // KATE_INLINENOTE_TEST_H
